@@ -71,6 +71,32 @@ class BackstageQuality(IQualityUpdate):
             self._item.quality += 1
         return self._item
 
+# Sulfuras
+
+class SulfurasSellIn(ISellInUpdate):
+
+    def apply(self) -> Item:
+        return self._item
+    
+class SulfurasQuality(IQualityUpdate):
+
+    def apply(self) -> Item:
+        return self._item
+    
+# Normal
+    
+class NormalSellIn(ISellInUpdate):
+    
+    def apply(self):
+        if not self.has_expired():
+            self._item.sell_in -= 1
+        return self._item
+    
+class NormalQuality(IQualityUpdate):
+
+    def apply(self):
+        self._item.quality -= 1
+        return self._item
 
 # Abstractions
 class AbstractItemUpdate(ABC):
