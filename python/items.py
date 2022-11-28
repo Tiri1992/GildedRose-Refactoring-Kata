@@ -13,6 +13,12 @@ class Item:
 # Implementations
 class ISellInUpdate(ABC):
 
+    def __init__(self, item: Item) -> None:
+        self._item = item 
+    
+    def has_expired(self) -> bool:
+        return self._item.sell_in <= 0
+
     @abstractmethod
     def apply(self):
         pass
@@ -20,18 +26,15 @@ class ISellInUpdate(ABC):
 
 class IQualityUpdate(ABC):
 
+    def __init__(self, item: Item) -> None:
+        self._item = item
+
     @abstractmethod
     def apply(self):
         pass 
 
-
+# AgedBrie
 class AgedBrieSellIn(ISellInUpdate):
-
-    def __init__(self, item: Item) -> None:
-        self._item = item 
-
-    def has_expired(self) -> bool:
-        return self._item.sell_in <= 0
 
     def apply(self) -> Item:
         if not self.has_expired():
@@ -39,9 +42,6 @@ class AgedBrieSellIn(ISellInUpdate):
         return self._item
     
 class AgedBrieQuality(IQualityUpdate):
-
-    def __init__(self, item: Item) -> None:
-        self._item = item 
 
     def has_max_quality(self) -> bool:
         return self._item.quality >= 50
@@ -51,8 +51,13 @@ class AgedBrieQuality(IQualityUpdate):
             self._item.quality += 1
         return self._item
 
+class BackstageSellIn(ISellInUpdate):
+
+    pass 
+
+
 # Abstractions
-class AbstractItemProfile(ABC):
+class AbstractItemUpdate(ABC):
 
     @abstractmethod
     def update_sell_in(self):
@@ -63,7 +68,7 @@ class AbstractItemProfile(ABC):
         pass
 
 
-class ItemProfile(AbstractItemProfile):
+class ItemUpdate(AbstractItemUpdate):
 
     def __init__(self, sell_in_handler: ISellInUpdate, quality_handler: IQualityUpdate) -> None:
         self._sell_in_handler = sell_in_handler

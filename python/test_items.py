@@ -1,5 +1,5 @@
 import unittest
-from items import Item, AgedBrieSellIn, AgedBrieQuality, ItemProfile
+from items import Item, AgedBrieSellIn, AgedBrieQuality, ItemUpdate
 
 # Break up test cases by implementation interfaces
 class TestSellInUpdate(unittest.TestCase):
@@ -35,13 +35,13 @@ class TestQualityUpdate(unittest.TestCase):
         self.assertEqual(response.quality, 50) 
     
     
-class TestItemProfile(unittest.TestCase):
+class TestItemUpdate(unittest.TestCase):
 
     def test_aged_brie(self):
         item = Item(name="Aged Brie", sell_in=10, quality=20)
         sell_in_handler = AgedBrieSellIn(item=item)
         quality_handler = AgedBrieQuality(item=item)
-        aged_brie_profile = ItemProfile(
+        aged_brie_profile = ItemUpdate(
             sell_in_handler=sell_in_handler,
             quality_handler=quality_handler,
         )
