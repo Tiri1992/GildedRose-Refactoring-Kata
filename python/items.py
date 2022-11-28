@@ -51,9 +51,25 @@ class AgedBrieQuality(IQualityUpdate):
             self._item.quality += 1
         return self._item
 
+# Backstage Pass
 class BackstageSellIn(ISellInUpdate):
 
-    pass 
+    def apply(self) -> Item:
+        if not self.has_expired():
+            self._item.sell_in -= 1
+        return self._item
+
+
+class BackstageQuality(IQualityUpdate):
+
+    def apply(self) -> Item:
+        if self._item.sell_in <= 5:
+            self._item.quality += 3
+        elif self._item.sell_in <= 10:
+            self._item.quality += 2
+        else:
+            self._item.quality += 1
+        return self._item
 
 
 # Abstractions
