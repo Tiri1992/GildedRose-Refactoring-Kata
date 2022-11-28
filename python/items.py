@@ -98,6 +98,20 @@ class NormalQuality(IQualityUpdate):
         self._item.quality -= 1
         return self._item
 
+# Conjured
+class ConjuredSellIn(ISellInUpdate):
+
+    def apply(self) -> Item:
+        if not self.has_expired():
+            self._item.sell_in -= 1
+        return self._item
+    
+class ConjuredQuality(IQualityUpdate):
+
+    def apply(self):
+        self._item.quality -= 2
+        return self._item
+
 # Abstractions
 class AbstractItemUpdate(ABC):
 

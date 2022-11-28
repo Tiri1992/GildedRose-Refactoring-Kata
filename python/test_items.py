@@ -1,5 +1,5 @@
 import unittest
-from items import Item, AgedBrieSellIn, AgedBrieQuality, ItemUpdate, BackstageSellIn, BackstageQuality, SulfurasSellIn, SulfurasQuality, NormalSellIn, NormalQuality
+from items import Item, AgedBrieSellIn, AgedBrieQuality, ItemUpdate, BackstageSellIn, BackstageQuality, SulfurasSellIn, SulfurasQuality, NormalSellIn, NormalQuality, ConjuredSellIn, ConjuredQuality
 
 # Break up test cases by implementation interfaces
 class TestSellInUpdate(unittest.TestCase):
@@ -40,7 +40,13 @@ class TestSellInUpdate(unittest.TestCase):
 
         self.assertEqual(response.sell_in, 6)
         
+    def test_conjured_items(self):
+        item = Item(name="Conjured Mana Cake", sell_in=10, quality=12)
+        conjured = ConjuredSellIn(item=item)
 
+        response: Item = conjured.apply()
+
+        self.assertEqual(response.sell_in, 9)
 
 class TestQualityUpdate(unittest.TestCase):
 
@@ -90,6 +96,15 @@ class TestQualityUpdate(unittest.TestCase):
         response: Item = normal.apply()
 
         self.assertEqual(response.quality, 9)
+    
+    def test_conjured_items(self):
+        item = Item(name="Conjured Mana Cake", sell_in=10, quality=12)
+        conjured = ConjuredQuality(item=item)
+
+        response: Item = conjured.apply()
+
+        self.assertEqual(response.quality, 10)
+
         
         
         
@@ -156,4 +171,19 @@ class TestItemUpdate(unittest.TestCase):
         sulfuras_update.update_sell_in()
 
         self.assertEqual(item.quality, 11)
+        self.assertEqual(item.sell_in, 9) 
+
+    def test_conjured(self):
+        item = Item(name="Conjured Mana Cake", sell_in=10, quality=12)
+        sell_in_handler = ConjuredSellIn(item=item)
+        quality_handler = ConjuredQuality(item=item)
+        sulfuras_update = ItemUpdate(
+            sell_in_handler=sell_in_handler,
+            quality_handler=quality_handler,
+        ) 
+
+        sulfuras_update.update_quality()
+        sulfuras_update.update_sell_in()
+
+        self.assertEqual(item.quality, 10)
         self.assertEqual(item.sell_in, 9) 
